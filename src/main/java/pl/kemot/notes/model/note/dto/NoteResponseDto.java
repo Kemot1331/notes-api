@@ -13,4 +13,5 @@ public class NoteResponseDto {
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Boolean isPinned;
 }

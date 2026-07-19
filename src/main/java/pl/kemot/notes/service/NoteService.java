@@ -71,6 +71,7 @@ public class NoteService {
         dto.setDescription(note.getDescription());
         dto.setCreatedAt(note.getCreatedAt());
         dto.setUpdatedAt(note.getUpdatedAt());
+        dto.setIsPinned(note.getIsPinned());
         return dto;
     }
 }

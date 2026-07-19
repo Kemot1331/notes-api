@@ -14,4 +14,6 @@ public class NoteRequestDto {
 
     @Size(max = 200)
     private String description;
+
+    private Boolean isPinned;
 }

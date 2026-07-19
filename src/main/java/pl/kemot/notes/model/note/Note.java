@@ -35,14 +35,6 @@ public class Note {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Note(Long id, String title, String description) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-    }
-
-    public Note(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
+    @Column(name = "pinned")
+    private Boolean isPinned = false;
 }
