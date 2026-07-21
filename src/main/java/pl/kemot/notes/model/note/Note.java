@@ -37,4 +37,7 @@ public class Note {
 
     @Column(name = "pinned")
     private Boolean isPinned = false;
+
+    @Column(name = "color")
+    private String color = "#ffdfba";
 }

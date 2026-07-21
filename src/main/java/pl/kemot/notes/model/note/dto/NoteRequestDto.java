@@ -16,4 +16,7 @@ public class NoteRequestDto {
     private String description;
 
     private Boolean isPinned;
+
+    @Size(max = 60)
+    private String color;
 }

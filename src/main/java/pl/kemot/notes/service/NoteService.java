@@ -71,6 +71,7 @@ public class NoteService {
         dto.setCreatedAt(note.getCreatedAt());
         dto.setUpdatedAt(note.getUpdatedAt());
         dto.setIsPinned(note.getIsPinned());
+        dto.setColor(note.getColor());
         return dto;
     }
 }
