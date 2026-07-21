@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import pl.kemot.notes.model.note.dto.NoteRequestDto;
 import pl.kemot.notes.model.note.dto.NoteResponseDto;
 import pl.kemot.notes.service.NoteService;
-import pl.kemot.notes.model.note.Note;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/notes")
 public class NoteController {
 
