@@ -11,7 +11,7 @@ public class NoteRequestDto {
 
     @NotBlank(message = "Title can't be empty")
     private String title;
-
-    @Size(max = 200)
     private String description;
+    private Boolean pinned;
+    private String color;
 }

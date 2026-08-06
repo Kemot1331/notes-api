@@ -13,4 +13,6 @@ public class NoteResponseDto {
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String color;
+    private Boolean pinned;
 }

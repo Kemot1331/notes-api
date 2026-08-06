@@ -23,17 +23,19 @@ public class Note {
 
     @NotBlank(message = "Title can't be empty")
     private String title;
-
-    @Size(max = 200)
     private String description;
 
-    @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "color")
+    private String color;
+
+    @Column(name = "pinned")
+    private Boolean pinned;
 
     public Note(Long id, String title, String description) {
         this.id = id;
