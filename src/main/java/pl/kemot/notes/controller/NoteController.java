@@ -48,8 +48,8 @@ public class NoteController {
         NoteResponseDto updatedNote = noteService.updateNote(id, noteDto);
         return ResponseEntity.ok(updatedNote);
     }
-    @GetMapping("/search/{keyword}")
-    public List<NoteResponseDto> findByTitleIgnoringCase(@PathVariable String keyword){
+    @GetMapping("/search")
+    public List<NoteResponseDto> findByTitleIgnoringCase(@RequestParam String keyword){
         return noteService.findByTitleIgnoringCase(keyword);
     }
 }

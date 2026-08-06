@@ -37,14 +37,4 @@ public class Note {
     @Column(name = "pinned")
     private Boolean pinned;
 
-    public Note(Long id, String title, String description) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-    }
-
-    public Note(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
 }
