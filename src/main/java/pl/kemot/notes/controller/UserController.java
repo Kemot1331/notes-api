@@ -1,11 +1,12 @@
 package pl.kemot.notes.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.kemot.notes.model.user.dto.LoginRequest;
 import pl.kemot.notes.model.user.dto.RegisterRequest;
+import pl.kemot.notes.model.user.dto.UserResponse;
 import pl.kemot.notes.service.UserService;
 
 @RestController
@@ -14,14 +15,18 @@ import pl.kemot.notes.service.UserService;
 public class UserController {
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        userService.registerUser(registerRequest);
-        return new ResponseEntity<String>("User registered successfully", HttpStatus.CREATED);
+    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
+        UserResponse createdUser = userService.registerUser(registerRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<UserResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.loginUser(loginRequest));
     }
 }

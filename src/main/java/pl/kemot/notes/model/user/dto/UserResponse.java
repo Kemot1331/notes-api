@@ -1,10 +1,12 @@
 package pl.kemot.notes.model.user.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
 public class UserResponse {
-    public Long id;
-    public String username;
-    public String email;
+    private Long id;
+    private String username;
+    private String email;
 }

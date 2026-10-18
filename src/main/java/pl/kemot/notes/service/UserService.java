@@ -5,8 +5,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kemot.notes.model.user.User;
+import pl.kemot.notes.model.user.dto.LoginRequest;
 import pl.kemot.notes.model.user.dto.RegisterRequest;
+import pl.kemot.notes.model.user.dto.UserResponse;
 import pl.kemot.notes.repository.UserRepository;
+
+import java.util.Locale;
 
 @Service
 public class UserService {
@@ -18,8 +22,12 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void registerUser(RegisterRequest registerRequest) {
-        String emailToRegister = registerRequest.getEmail().trim().toLowerCase();
+    private String mailNormalization(String email){
+        return email.toLowerCase(Locale.ROOT).trim();
+    }
+
+    public UserResponse registerUser(RegisterRequest registerRequest) {
+        String emailToRegister = mailNormalization(registerRequest.getEmail());
 
         if (userRepository.existsByEmail(emailToRegister)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
@@ -29,6 +37,31 @@ public class UserService {
         user.setEmail(emailToRegister);
         user.setPasswordHash(passwordEncoder.encode(registerRequest.getPassword()));
 
-        userRepository.save(user);
+        return convertUserToUserResponse(userRepository.save(user));
+    }
+
+    private UserResponse convertUserToUserResponse(User user) {
+        UserResponse userResponse = new UserResponse();
+
+        userResponse.setId(user.getId());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setEmail(user.getEmail());
+
+        return userResponse;
+    }
+
+    public UserResponse loginUser(LoginRequest loginRequest) {
+        String emailToLogin = mailNormalization(loginRequest.getEmail());
+        User user = userRepository.findByEmail(emailToLogin)
+                .orElseThrow(this::responseStatusExceptionToLogin);
+
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())) {
+            throw responseStatusExceptionToLogin();
+        }
+        return convertUserToUserResponse(user);
+    }
+
+    private ResponseStatusException responseStatusExceptionToLogin() {
+        return new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong email or password");
     }
 }

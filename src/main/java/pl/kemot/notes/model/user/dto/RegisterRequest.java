@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
@@ -16,7 +15,7 @@ public class RegisterRequest {
 
     @NotBlank(message = "Email can't be empty")
     @Email
-    @Size(min = 3, max = 60, message = "The email is too big or small")
+    @Size(min = 3, max = 254, message = "The email is too big or small")
     private String email;
 
     @NotBlank(message = "Password can't be empty")
