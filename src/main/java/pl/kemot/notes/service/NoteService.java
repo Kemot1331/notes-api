@@ -36,6 +36,8 @@ public class NoteService {
         Note note = new Note();
         note.setTitle(noteDto.getTitle());
         note.setDescription(noteDto.getDescription());
+        note.setColor(noteDto.getColor());
+        note.setPinned(noteDto.getPinned());
 
         return convertToResponseDto(noteRepository.save(note));
     }
@@ -53,6 +55,8 @@ public class NoteService {
 
         updateNote.setTitle(noteDto.getTitle());
         updateNote.setDescription(noteDto.getDescription());
+        updateNote.setColor(noteDto.getColor());
+        updateNote.setPinned(noteDto.getPinned());
         updateNote.setUpdatedAt(LocalDateTime.now());
 
         return convertToResponseDto(noteRepository.save(updateNote));

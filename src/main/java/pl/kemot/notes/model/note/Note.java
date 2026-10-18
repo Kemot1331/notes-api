@@ -37,4 +37,6 @@ public class Note {
     @Column(name = "pinned")
     private Boolean pinned;
 
+    @Column(name = "user_id")
+    private Long userId;
 }
