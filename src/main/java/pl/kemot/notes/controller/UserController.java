@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.kemot.notes.model.user.dto.AuthResponse;
 import pl.kemot.notes.model.user.dto.LoginRequest;
 import pl.kemot.notes.model.user.dto.RegisterRequest;
 import pl.kemot.notes.model.user.dto.UserResponse;
@@ -26,7 +27,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.loginUser(loginRequest));
     }
 }

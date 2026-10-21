@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kemot.notes.model.user.User;
+import pl.kemot.notes.model.user.dto.AuthResponse;
 import pl.kemot.notes.model.user.dto.LoginRequest;
 import pl.kemot.notes.model.user.dto.RegisterRequest;
 import pl.kemot.notes.model.user.dto.UserResponse;
@@ -16,10 +17,12 @@ import java.util.Locale;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     private String mailNormalization(String email){
@@ -50,15 +53,19 @@ public class UserService {
         return userResponse;
     }
 
-    public UserResponse loginUser(LoginRequest loginRequest) {
+    public AuthResponse loginUser(LoginRequest loginRequest) {
         String emailToLogin = mailNormalization(loginRequest.getEmail());
+
         User user = userRepository.findByEmail(emailToLogin)
                 .orElseThrow(this::responseStatusExceptionToLogin);
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())) {
             throw responseStatusExceptionToLogin();
         }
-        return convertUserToUserResponse(user);
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setToken(jwtService.generateToken(user.getId()));
+        authResponse.setUser(convertUserToUserResponse(user));
+        return authResponse;
     }
 
     private ResponseStatusException responseStatusExceptionToLogin() {
