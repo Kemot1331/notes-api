@@ -1,7 +1,6 @@
 package pl.kemot.notes.service;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kemot.notes.model.note.Note;
@@ -20,37 +19,38 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public List<NoteResponseDto> findAllNotes() {
-        return noteRepository.findAll().stream()
+    public List<NoteResponseDto> findAllNotes(Long userId) {
+        return noteRepository.findByuserId(userId).stream()
                 .map(this::convertToResponseDto)
                 .toList();
     }
 
-    public NoteResponseDto findNoteById(Long id){
-        return noteRepository.findById(id)
+    public NoteResponseDto findNoteById(Long id, Long userId) {
+        return noteRepository.findByIdAndUserId(id, userId)
                 .map(this::convertToResponseDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public NoteResponseDto addNote(NoteRequestDto noteDto){
+    public NoteResponseDto addNote(NoteRequestDto noteDto, Long userId){
         Note note = new Note();
         note.setTitle(noteDto.getTitle());
         note.setDescription(noteDto.getDescription());
         note.setColor(noteDto.getColor());
         note.setPinned(noteDto.getPinned());
+        note.setUserId(userId);
 
         return convertToResponseDto(noteRepository.save(note));
     }
 
-    public void deleteNoteById(Long id){
-        if(!noteRepository.existsById(id)){
+    public void deleteNoteById(Long id, Long userId) {
+        if(noteRepository.findByIdAndUserId(id, userId).isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         noteRepository.deleteById(id);
     }
 
-    public NoteResponseDto updateNote(Long id, NoteRequestDto noteDto){
-        Note updateNote = noteRepository.findById(id)
+    public NoteResponseDto updateNote(Long id, NoteRequestDto noteDto, Long userId){
+        Note updateNote = noteRepository.findByIdAndUserId(id,  userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         updateNote.setTitle(noteDto.getTitle());
@@ -62,8 +62,8 @@ public class NoteService {
         return convertToResponseDto(noteRepository.save(updateNote));
     }
 
-    public List<NoteResponseDto> findByTitleIgnoringCase(String keyword){
-        return noteRepository.findByTitleContainingIgnoreCase(keyword).stream()
+    public List<NoteResponseDto> findByTitleIgnoringCase(String keyword, Long userId){
+        return noteRepository.findByTitleContainingIgnoreCaseAndUserId(keyword, userId).stream()
                 .map(this::convertToResponseDto)
                 .toList();
     }
